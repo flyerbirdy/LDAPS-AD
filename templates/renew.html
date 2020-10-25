@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<html>
+
+<body>
+  <div id="login">
+    <h3 class="text-center text-white pt-5">Hello {{ Name }}!</h3>
+    <div class="container">
+      <div id="login-row" class="row justify-content-center align-items-center">
+        <div id="login-column" class="col-md-6">
+          <div id="login-box" class="col-md-12">
+            <form id="login-form" class="form" method="post" action="/renew">
+              <h6 class="text-center text-info">请输入新密码</h6>
+              <h6 class="text-center text-info">密码请符合数字符号大小写</h6>
+              <div class="form-group">
+                <label for="password" class="text-info">请输入密码:</label><br>
+                <input type="password" name="userName" id="pw1" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="password" class="text-info">请确认密码:</label><br>
+                <input type="password" name="password" id="pw2" onkeyup="validate()" class="form-control">
+                <span id="tishi"></span>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                {% for message in messages %}
+                <span style="color:red">{{message}}</font></span></br>
+                {% endfor %}
+                {% else %}
+                </br>
+                {% endif %}
+                {% endwith %}
+              </div>
+              <div class=" form-group">
+                <input type="submit" name="submit" id="submit" class="btn btn-primary btn-md" value="提交">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script language="JavaScript">
+  function validate() {
+    var pass1 = document.getElementById("pw1").value;
+    var pass2 = document.getElementById("pw2").value;
+    if (pass1 == pass2) {
+      //document.getElementById("tishi").innerHTML = "<font color='green'>两次密码相同</font>";
+      document.getElementById("submit").disabled = false;
+    }
+    else {
+      document.getElementById("tishi").innerHTML = "<font color='red'>两次密码不相同</font>";
+      document.getElementById("submit").disabled = true;
+    }
+  }
+</script>
+
+
+</html>
+{% endblock %}
