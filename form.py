@@ -2,13 +2,13 @@ from flask import Flask, render_template, redirect, request, flash, url_for, ses
 from flask_wtf.csrf import CSRFProtect
 import ldap
 
-##Ldap绑定
+##Ldap binding
 
-dn = "CN=Administrator,CN=Users,DC=Home,DC=com"  ##需要AccountOperation权限
+dn = "CN=Administrator,CN=Users,DC=Home,DC=com"  ##Needs AccountOperation
 pw = "123.com"
-cert_file='/home/flask/cert/ca.crt'   ##CA。并签发一张到AD
+cert_file='/home/flask/cert/ca.crt'   ##CA。Sign to AD
 ldap.set_option(ldap.OPT_X_TLS_CACERTFILE, cert_file)
-con = ldap.initialize('ldaps://Home-2016.Home.com')   ##必须用域名不能用IP
+con = ldap.initialize('ldaps://Home-2016.Home.com')   ##Should using Domain not IP
 con.simple_bind_s( dn, pw )
 
 app = Flask(__name__)
@@ -17,7 +17,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('base.html')  #Header 和Base
+    return render_template('base.html')  #Header Base
 
 @app.route('/redirectFunc')
 def redirectFunc():
@@ -50,13 +50,13 @@ def login():
         session['distinguishedNameResult'] = distinguishedNameResult[0][0]
     
     else :
-        flash('找不到手机号')
+        flash('找不到手机号') ##NoMobile
         return render_template('login.html')
         
     if userName == adresult and Phone == Phone:
         return render_template('renew.html', Name = adresult)
     else :
-        flash('手机号和账号对不上[这边要做一个短信认证模块]')
+        flash('手机号和账号对不上[这边要做一个短信认证模块]') ##Mobile can't compare with Account
         return render_template('login.html')
     
     return render_template('login.html')
@@ -76,7 +76,7 @@ def renew():
         return render_template('success.html')
     
     except:
-        flash('密码不符合要求')
+        flash('密码不符合要求') ## Password not follow request
         return render_template('renew.html')
 
 
