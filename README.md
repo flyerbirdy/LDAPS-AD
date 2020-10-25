@@ -1,4 +1,6 @@
 # LDAPS
 Windows AD & Flask with Ldaps
 
-Using Ldaps to control ad account 
+Using Flask & Ldaps to control the ad account.
+
+Install request.txt then run form.py
