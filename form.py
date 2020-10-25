@@ -1,6 +1,12 @@
 from flask import Flask, render_template, redirect, request, flash, url_for, session
 from flask_wtf.csrf import CSRFProtect
 import ldap
+import os
+
+app = Flask(__name__)
+app.config['SECRET_KEY'] = os.urandom(24) #和session一样，必须要配置一个secret key参与加密
+CSRFProtect(app)
+
 
 ##Ldap binding
 
@@ -11,13 +17,13 @@ ldap.set_option(ldap.OPT_X_TLS_CACERTFILE, cert_file)
 con = ldap.initialize('ldaps://Home-2016.Home.com')   ##Should using Domain not IP
 con.simple_bind_s( dn, pw )
 
-app = Flask(__name__)
+
 
 
 
 @app.route('/')
 def index():
-    return render_template('base.html')  #Header Base
+    return render_template('login.html')  #Header Base
 
 @app.route('/redirectFunc')
 def redirectFunc():
@@ -33,6 +39,8 @@ def tologinSonHtml():
 def login():
     userName = request.form['userName']
     Phone = request.form['Phone']
+    verCode = request.form['verCode']
+    
 ##Ldaqp
     base_dn = 'CN=Users,DC=Home,DC=com'
     filter = "(telephoneNumber={p})".format(p = Phone)
@@ -52,6 +60,7 @@ def login():
     else :
         flash('找不到手机号') ##NoMobile
         return render_template('login.html')
+        #return go
         
     if userName == adresult and Phone == Phone:
         return render_template('renew.html', Name = adresult)
@@ -59,9 +68,9 @@ def login():
         flash('手机号和账号对不上[这边要做一个短信认证模块]') ##Mobile can't compare with Account
         return render_template('login.html')
     
-    return render_template('login.html')
+    #return render_template('login.html')
 
-@app.route('/renew', methods=['GET','POST'])
+@app.route('/renew', methods=['GET','POST']) 
 def renew():
 
     username = session.get('distinguishedNameResult')
@@ -81,5 +90,5 @@ def renew():
 
 
 if __name__ == '__main__':
-    app.secret_key = '123456'
+    #app.secret_key = '123456'
     app.run(host='0.0.0.0', port=80, debug=True)

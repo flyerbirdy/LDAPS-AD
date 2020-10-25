@@ -12,6 +12,7 @@
         <div id="login-column" class="col-md-6">
           <div id="login-box" class="col-md-12">
             <form id="login-form" class="form" method="post" action="/renew">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
               <h6 class="text-center text-info">请输入新密码</h6>
               <h6 class="text-center text-info">密码请符合数字符号大小写</h6>
               <div class="form-group">

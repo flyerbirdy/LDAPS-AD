@@ -42,22 +42,25 @@
 
 
     {% block content %} {#这里也是一样 block是固定的  后面content写成什么都行，只要保证子模版使用的时候和这里一致#}
-    <a class="text-center text-white pt-5" href="{{ url_for('tologinSonHtml') }}">密码修改主页面，请点击继续</a>
+
     {% endblock %}
+
+    <h3 class="text-center text-white pt-5"><a href="{{ url_for('tologinSonHtml') }}">返回主页</a></h3>
+
 </body>
 
-{% block footer %}
+    {% block footer %}
 
 
 
-<p class="text-right">Copyright 2010 by <a href="http://domain.invalid/">Very Great</a>.</p>
+    <p class="text-right">Copyright 2010 by <a href="http://domain.invalid/">Very Great</a>.</p>
 
 
 
-{% endblock %}
+    {% endblock %}
 
 
-
+</html>
 
 
 

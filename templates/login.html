@@ -12,15 +12,22 @@
                 <div id="login-column" class="col-md-6">
                     <div id="login-box" class="col-md-12">
                         <form id="login-form" class="form" method="post" action="{{ url_for('login') }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                             <h3 class="text-center text-info">请输入账号和手机</h3>
                             <div class="form-group">
                                 <label for="userName" class="text-info">账号:</label><br>
                                 <input type="text" name="userName" id="username" class="form-control">
                             </div>
                             <div class="form-group">
-                                <label for="password" class="text-info">手机:</label><br>
-                                <input type="text" name="Phone" id="password" class="form-control">
+                                <label for="tel" class="text-info">手机:</label><br>
+                                <input type="tel" name="Phone" id="password" class="form-control">
                             </div>
+
+                            <div class="form-group">  <input type="tel" name="verCode" id="verCode" value="" placeholder="请输入验证码"
+                                    maxlength="6" />
+                                <input class="text-info" type="button" name="" id="verCodeBtn" value="获取验证码" onclick="settime(this);" />
+                            </div>
+
                             {% with messages = get_flashed_messages() %}
                             {% if messages %}
                             {% for message in messages %}
@@ -39,5 +46,78 @@
             </div>
         </div>
     </div>
+
+
+
 </body>
+
+
+
+<script>
+
+    //验证码
+    var counts = 60;
+
+    function settime(val) {
+        if (counts == 0) {
+            val.removeAttribute("disabled");
+            val.value = "获取验证码";
+            counts = 60;
+            return false;
+        } else {
+            val.setAttribute("disabled", true);
+            val.value = "重新发送（" + counts + "）";
+            counts--;
+        }
+        setTimeout(function () {
+            settime(val);
+        }, 1000);
+    }
+
+
+
+    $(function () {
+        //获取验证码
+        $("#verCodeBtn").click(function () {
+            var userinfo = {
+                "UserPhoneNum": '86' + $("input[name='Phone']").val()
+            }
+
+            $.ajax({
+                url: "https://www.xxxxx.cn/user/sendcode/",
+                data: userinfo,
+                type: "get",
+                success: function (data) {
+                    if (JSON.parse(data).state === 404 || JSON.parse(data).state === 202 || userinfo.UserPhoneNum === '86//') {
+                        alert("验证码发送失败")
+                    } else {
+                        alert("验证码发送成功，请耐心等待")
+                    }
+                },
+                error: function () {
+                    alert("发送失败");
+                }
+            });
+
+        });
+    })
+
+
+
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
 {% endblock %}
